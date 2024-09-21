@@ -15,15 +15,16 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, description } = req.body;
+    const { title, description, priority } = req.body;
     try {
       const newTodo = new Todo({
         title,
         description,
+        priority,
         user: req.user.id,
       });
       await newTodo.save();
-      res.json(newTodo);
+      res.json({ success: true, data: newTodo });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Server error");
@@ -42,7 +43,7 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, description } = req.body;
+    const { title, description, priority, completed } = req.body;
     try {
       const todo = await Todo.findById(req.params.id);
       if (!todo) {
@@ -53,8 +54,10 @@ router.put(
       }
       todo.title = title;
       todo.description = description;
+      todo.priority = priority;
+      todo.completed = completed;
       await todo.save();
-      res.json(todo);
+      res.json({ success: true, data: todo });
     } catch (error) {
       console.error(error.message);
       if (error.kind === "ObjectId") {
@@ -78,7 +81,7 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(403).json({ msg: "Not authorized" });
     }
     await todo.deleteOne({ _id: req.params.id });
-    res.status(204).json({ msg: "To-do deleted" });
+    res.status(204).json({ success: "true", msg: "To-do deleted" });
   } catch (error) {
     console.error(error.message);
     if (error.kind === "ObjectId") {
@@ -92,12 +95,33 @@ router.delete("/:id", auth, async (req, res) => {
 // @desc   Get a todos with pagination
 // @access Private
 router.get("/", auth, async (req, res) => {
+  const page = parseInt(req.query.page) || 1; // Varsayılan olarak 1. sayfa
+  const limit = parseInt(req.query.limit) || 10; // Varsayılan olarak 5 öğe
+  const skipIndex = (page - 1) * limit;
+  const { sortBy, order, filterBy, filterValue } = req.query;
+
+  // Sıralama kriteri ve yönü
+  const sortQuery = {};
+  if (sortBy) {
+    sortQuery[sortBy] = order === "desc" ? -1 : 1;
+  }
+
   try {
+    // Filtreleme ve sıralamayı birlikte kullanıyoruz
     const todos = await Todo.find({ user: req.user.id })
-      .sort({ date: -1 })
-      .limit(10)
-      .skip((req.query.page - 1) * 10);
-    res.json(todos);
+      .sort(sortQuery)
+      .skip(skipIndex)
+      .limit(limit)
+      .exec();
+
+    const totalTodos = await Todo.countDocuments({ user: req.user.id }); // Filtreye göre toplam sayıyı al
+
+    res.json({
+      success: "true",
+      data: todos,
+      totalPages: Math.ceil(totalTodos / limit),
+      currentPage: page,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
