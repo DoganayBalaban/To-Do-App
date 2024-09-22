@@ -23,11 +23,13 @@ const AddNotes = () => {
   const { addNotes } = useNoteStore();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
 
   const handleAddNote = async (e) => {
     e.preventDefault();
     try {
-      const result = await addNotes(title, body);
+      const result = await addNotes(title, body, tags);
       if (result.success) {
         toast({
           title: "Note Added",
@@ -45,6 +47,13 @@ const AddNotes = () => {
         duration: 2000,
         isClosable: true,
       });
+    }
+  };
+  const handleAddTag = () => {
+    if (tagInput.trim()) {
+      // Tag'i array'e ekle ve inputu temizle
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
     }
   };
 
@@ -76,6 +85,21 @@ const AddNotes = () => {
                   style={{ height: "300px" }}
                   placeholder="Write your note here..."
                 />
+              </div>
+              <div>
+                <Label>Tags</Label>
+                <Input
+                  type="text"
+                  placeholder="Add Tags (press enter)"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                />
+                <Button onClick={handleAddTag}>Add</Button>
+              </div>
+              <div>
+                {tags.map((tag, index) => (
+                  <span key={index}>{tag},</span>
+                ))}
               </div>
             </div>
           </CardContent>

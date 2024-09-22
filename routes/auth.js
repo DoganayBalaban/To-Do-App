@@ -108,4 +108,19 @@ router.post(
   }
 );
 
+router.put("/me", auth, async (req, res) => {
+  const { name } = req.body;
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(400).json({ msg: "User not found" });
+    }
+    user.name = name;
+    await user.save();
+    res.json({ success: true, data: user });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
 module.exports = router;

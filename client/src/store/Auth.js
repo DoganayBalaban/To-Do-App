@@ -65,5 +65,29 @@ const useAuthStore = create((set) => ({
       set({ error: error.response.data.msg, loading: false });
     }
   },
+  updateProfile: async (name) => {
+    try {
+      set({ loading: true, error: false });
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        "http://localhost:3000/api/auth/me",
+        {
+          name: name,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      return set({
+        success: true,
+        loading: false,
+        error: null,
+      });
+    } catch (error) {
+      set({ error: error.response.data.msg, loading: false });
+    }
+  },
 }));
 export default useAuthStore;

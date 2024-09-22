@@ -21,11 +21,12 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, body } = req.body;
+    const { title, body, tags } = req.body;
     try {
       const newNote = new Note({
         title,
         body,
+        tags,
         user: req.user.id,
       });
       await newNote.save();
@@ -36,6 +37,7 @@ router.post(
     }
   }
 );
+
 // @route  PUT api/notes/id
 // @desc   Update a note
 // @access Private
@@ -53,7 +55,7 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, body } = req.body;
+    const { title, body, tags } = req.body;
     try {
       const note = await Note.findById(req.params.id);
       if (!note) {
@@ -64,6 +66,7 @@ router.put(
       }
       note.title = title;
       note.body = body;
+      note.tags = tags || note.tags;
       await note.save();
       res.json({ success: true, data: note });
     } catch (error) {

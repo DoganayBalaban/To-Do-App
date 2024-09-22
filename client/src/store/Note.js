@@ -20,7 +20,7 @@ const useNoteStore = create((set) => ({
       set({ loading: false, eerror: error.response?.data?.msg || "Hata " });
     }
   },
-  addNotes: async (title, body) => {
+  addNotes: async (title, body, tags) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
@@ -28,6 +28,7 @@ const useNoteStore = create((set) => ({
         {
           title: title,
           body: body,
+          tags: tags,
         },
         {
           headers: {
@@ -63,7 +64,7 @@ const useNoteStore = create((set) => ({
       set({ loading: false, error: error.response?.data?.msg || "Silinemedi" });
     }
   },
-  updateNote: async (id, title, body) => {
+  updateNote: async (id, title, body, tags) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
@@ -71,6 +72,7 @@ const useNoteStore = create((set) => ({
         {
           title: title,
           body: body,
+          tags: tags,
         },
         {
           headers: {

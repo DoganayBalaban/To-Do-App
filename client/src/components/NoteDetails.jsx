@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { TiDeleteOutline } from "react-icons/ti";
 import useNoteStore from "@/store/Note";
+
 import { BsListTask } from "react-icons/bs";
 import ReactQuill from "react-quill";
+import { IoIosClose } from "react-icons/io";
 
 import {
   Card,
@@ -38,11 +40,14 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const NoteDetails = ({ note }) => {
   const { deleteNote, updateNote } = useNoteStore();
   const [updatedTitle, setUpdatedTitle] = useState(note.title);
   const [updatedBody, setUpdatedBody] = useState(note.body);
+  const [updatedTags, setUpdatedTags] = useState([...note.tags]);
+  const [tagInput, setTagInput] = useState("");
   const { toast } = useToast();
   const handleDelete = async (id) => {
     try {
@@ -67,14 +72,23 @@ const NoteDetails = ({ note }) => {
       });
     }
   };
+  const handleRemoveTag = (tagToRemove) => {
+    setUpdatedTags(updatedTags.filter((tag) => tag !== tagToRemove));
+  };
   const handleUpdateNote = async (
     id,
 
     updatedTitle,
-    updatedBody
+    updatedBody,
+    updatedTags
   ) => {
     try {
-      const { success } = await updateNote(id, updatedTitle, updatedBody);
+      const { success } = await updateNote(
+        id,
+        updatedTitle,
+        updatedBody,
+        updatedTags
+      );
       if (success) {
         toast({
           title: "Task Updated",
@@ -108,6 +122,18 @@ const NoteDetails = ({ note }) => {
             dangerouslySetInnerHTML={{ __html: note.body }} // HTML'yi render et
             className="prose"
           />
+          <div className="flex flex-col gap-2 mt-3">
+            <span className="text-xl font-bold">Tags</span>{" "}
+            <ul>
+              {note.tags.map((tag, index) => (
+                <li key={index}>
+                  <Badge key={index} className="p-1">
+                    {tag}
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          </div>
         </CardContent>
         <div className="flex justify-end space-x-2 p-4">
           <Dialog>
@@ -146,12 +172,51 @@ const NoteDetails = ({ note }) => {
                     placeholder="Write your note here..."
                   />
                 </div>
+                <div className="">
+                  <Label htmlFor="" className="text-right">
+                    Tags
+                  </Label>
+                  <Input
+                    type="text"
+                    value={tagInput}
+                    onChange={(e) => {
+                      setTagInput(e.target.value);
+                    }}
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="ml-2"
+                    onClick={() => {
+                      setUpdatedTags([...updatedTags, tagInput]);
+                      setTagInput("");
+                    }}
+                  >
+                    Add
+                  </Button>
+                  <div>
+                    {updatedTags.map((tag, index) => (
+                      <Badge key={index}>
+                        {tag}{" "}
+                        <IoIosClose
+                          onClick={() => handleRemoveTag(tag)}
+                          className="cursor-pointer"
+                        />
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
               </div>
               <DialogFooter>
                 <DialogClose asChild>
                   <Button
                     onClick={() => {
-                      handleUpdateNote(note._id, updatedTitle, updatedBody);
+                      handleUpdateNote(
+                        note._id,
+                        updatedTitle,
+                        updatedBody,
+                        updatedTags
+                      );
                     }}
                     type="submit"
                   >
