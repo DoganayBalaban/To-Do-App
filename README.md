@@ -1,17 +1,16 @@
-https://roadmap.sh/projects/todo-list-api
+# To-Do App
 
----
-
-# To-do API
-
-This is a RESTful API for managing to-do tasks. The API allows users to create, update, delete, and retrieve tasks with different statuses such as "todo," "in-progress," and "done."
+A simple and efficient To-Do application built using **React**, **Zustand**, **Tailwind CSS**, and **ShadCN UI**. This app allows users to manage their tasks with features such as adding, editing, deleting, and filtering tasks. It provides a minimalistic and responsive user interface.
 
 ## Features
 
-- **Add a Task:** Create a new task with a description and status.
-- **Update a Task:** Modify task details.
-- **Delete a Task:** Remove a task by ID.
-- **List Tasks:** Retrieve all tasks or filter by status.
+- **Task Management**: Create, edit, and delete to-do tasks.
+- **Task Filtering**: Filter tasks based on their completion status.
+- **Responsive Design**: User-friendly interface across various devices.
+- **State Management**: Zustand is used for efficient and scalable state management.
+- **Tailwind CSS**: Ensures a clean and responsive design.
+- **ShadCN UI**: Provides reusable and customizable UI components.
+- **Tagging System**: Add tags to tasks for better organization.
 
 ## Installation
 
@@ -30,54 +29,13 @@ This is a RESTful API for managing to-do tasks. The API allows users to create, 
    npm start
    ```
 
-## API Endpoints
-
-### Add a Task
-- **URL:** `/todos`
-- **Method:** `POST`
-- **Body:**
-  ```json
-  {
-     "title":"Todos1",
-    "description": "Buy groceries",
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "id": "1",
-     "title":"Todos1",
-    "description": "Buy groceries",
-    "createdAt": "2024-09-03T10:00:00.000Z",
-    "updatedAt": "2024-09-03T10:00:00.000Z"
-  }
-  ```
-
-### Update a Task
-- **URL:** `/todos/:id`
-- **Method:** `PUT`
-- **Body:**
-  ```json
-  {
-    "title":"Todos1",
-    "description": "Buy groceries and cook dinner",
-  }
-  ```
-
-### Delete a Task
-- **URL:** `/todos/:id`
-- **Method:** `DELETE`
-
-### List All Tasks
-- **URL:** `/todos`
-- **Method:** `GET`
-
-
 ## Dependencies
 
 - **Express.js:** Web framework for Node.js.
+- **React.js:** A JavaScript library for building user interfaces.
+-  **Tailwind:** A utility-first CSS framework for rapid UI development.
 - **Mongoose:** MongoDB object modeling tool.
-- **Body-parser:** Middleware to parse incoming request bodies.
+- **Zustand:** A small, fast, and scalable state management solution.
 
 ## Contributing
 
