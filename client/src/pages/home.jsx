@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PaginationDetail from "@/components/PaginationDetail";
+import useThemeStore from "@/store/Theme";
 const home = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const {
@@ -23,24 +24,32 @@ const home = () => {
     error,
     todos,
     setSort,
-    setFilter,
+    checkedFilter,
+    toggleCheckedFilter,
     setPage,
     page,
     totalPages,
     sortBy,
     order,
   } = useTodoStore();
-
+  const { theme } = useThemeStore();
   useEffect(() => {
     getTodos();
   }, [page, sortOrder]);
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div
+        className={
+          theme == "dark"
+            ? "bg-[#6A7280] flex justify-center items-center h-screen"
+            : "flex justify-center items-center h-screen"
+        }
+      >
         <img src={logo}></img>
       </div>
     );
   }
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -52,28 +61,47 @@ const home = () => {
 
   return (
     <div>
-      <Link to="/add-task">
-        <Button className="m-2 p-2 float-end flex flex-column">
-          <IoMdAddCircleOutline className="me-1" />
-          Add Task
-        </Button>
-      </Link>
+      <div className="flex flex-row m-2 p-2">
+        <div className="m-2">
+          <Button>Checked</Button>
+        </div>
+        <Link to="/add-task">
+          <Button className=" float-end m-2">
+            <IoMdAddCircleOutline className="" />
+            Add Task
+          </Button>
+        </Link>
+      </div>
       <Table>
         <TableCaption>Your current todo list.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px]">Done</TableHead>
-            <TableHead>Task</TableHead>
-            <TableHead>Description</TableHead>
+            <TableHead className={theme == "dark" ? "text-black" : ""}>
+              Done
+            </TableHead>
+            <TableHead className={theme == "dark" ? "text-black" : ""}>
+              Task
+            </TableHead>
+            <TableHead className={theme == "dark" ? "text-black" : ""}>
+              Description
+            </TableHead>
             <TableHead
               onClick={() => handleSort("date")}
-              className="text-right cursor-pointer"
+              className={
+                theme == "dark"
+                  ? "text-black cursor-pointer text-right"
+                  : "cursor-pointer text-right"
+              }
             >
               Added Date {sortOrder === "asc" ? "▲" : "▼"}
             </TableHead>
             <TableHead
               onClick={() => handleSort("priority")}
-              className="text-right cursor-pointer"
+              className={
+                theme == "dark"
+                  ? "text-black cursor-pointer text-right"
+                  : "cursor-pointer text-right"
+              }
             >
               Priority {sortOrder === "asc" ? "▲" : "▼"}
             </TableHead>

@@ -17,6 +17,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import useNoteStore from "@/store/Note";
+import useThemeStore from "@/store/Theme";
 
 const AddNotes = () => {
   const { toast } = useToast();
@@ -25,7 +26,7 @@ const AddNotes = () => {
   const [body, setBody] = useState("");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
-
+  const { theme } = useThemeStore();
   const handleAddNote = async (e) => {
     e.preventDefault();
     try {
@@ -59,15 +60,22 @@ const AddNotes = () => {
 
   return (
     <div>
-      <Card className="">
+      <Card className={theme == "dark" ? "bg-gray-600 h-[90vh]" : "h-[90vh]"}>
         <form onSubmit={handleAddNote}>
           <CardHeader>
-            <CardTitle>Add New Note</CardTitle>
+            <CardTitle className={theme == "dark" ? "text-white" : ""}>
+              Add New Note
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="title">Title</Label>
+                <Label
+                  className={theme == "dark" ? "text-white" : ""}
+                  htmlFor="title"
+                >
+                  Title
+                </Label>
                 <Input
                   id="title"
                   placeholder="Enter task title"
@@ -76,18 +84,27 @@ const AddNotes = () => {
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="body">Body</Label>
+                <Label
+                  className={theme == "dark" ? "text-white" : ""}
+                  htmlFor="body"
+                >
+                  Body
+                </Label>
                 {/* editör kullanarak çöz şunu */}
                 <ReactQuill
                   theme="snow"
                   value={body}
                   onChange={setBody}
-                  style={{ height: "300px" }}
+                  className={
+                    theme == "dark" ? "bg-gray-200 h-64 text-white" : "h-64"
+                  }
                   placeholder="Write your note here..."
                 />
               </div>
               <div>
-                <Label>Tags</Label>
+                <Label className={theme == "dark" ? "text-white" : ""}>
+                  Tags
+                </Label>
                 <Input
                   type="text"
                   placeholder="Add Tags (press enter)"

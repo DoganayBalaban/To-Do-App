@@ -22,9 +22,11 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import useTodoStore from "@/store/Todo";
+import useThemeStore from "@/store/Theme";
 
 const AddTask = () => {
   const navigate = useNavigate();
+  const { theme } = useThemeStore();
   const { toast } = useToast();
   const { loading, error, addTodos, success } = useTodoStore();
   const [title, setTitle] = useState("");
@@ -61,15 +63,22 @@ const AddTask = () => {
 
   return (
     <div>
-      <Card className="">
+      <Card className={theme == "dark" ? "bg-gray-600 h-[90vh]" : "h-[90vh]"}>
         <form onSubmit={handleAddTask}>
           <CardHeader>
-            <CardTitle>Add New Task</CardTitle>
+            <CardTitle className={theme == "dark" ? "text-white" : ""}>
+              Add New Task
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="title">Title</Label>
+                <Label
+                  className={theme == "dark" ? "text-white" : ""}
+                  htmlFor="title"
+                >
+                  Title
+                </Label>
                 <Input
                   id="title"
                   placeholder="Enter task title"
@@ -78,7 +87,12 @@ const AddTask = () => {
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="description">Description</Label>
+                <Label
+                  className={theme == "dark" ? "text-white" : ""}
+                  htmlFor="description"
+                >
+                  Description
+                </Label>
                 <Textarea
                   id="description"
                   placeholder="Enter task description"

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
@@ -12,14 +12,17 @@ import Notes from "./pages/Notes";
 import AddNotes from "./pages/AddNotes";
 import useAuthStore from "./store/Auth";
 import Profile from "./pages/Profile";
+import useThemeStore from "./store/Theme";
 
 const App = () => {
   const { getUser, user } = useAuthStore();
+  const { theme } = useThemeStore();
   useEffect(() => {
     getUser();
   }, []);
+
   return (
-    <div>
+    <div className={theme == "dark" ? "bg-gray-500" : "bg-white"}>
       <Navbar />
       <Routes>
         <Route path="/" element={<Index />} />

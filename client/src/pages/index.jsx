@@ -10,9 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import useThemeStore from "@/store/Theme";
 
 const Index = () => {
   const { isAuthenticated } = useAuthStore();
+  const { theme } = useThemeStore();
   return (
     <div
       style={{
@@ -21,15 +23,35 @@ const Index = () => {
       }}
       className=" h-[90vh] bg-cover bg-center"
     >
-      <Card className="w-[350px]  h-[80vh] float-start m-10 bg-white bg-opacity-90 shadow-lg rounded-lg text-center">
+      <Card
+        className={
+          theme == "dark"
+            ? "bg-gray-800 w-[350px]  h-[80vh] float-start m-10  bg-opacity-90 shadow-lg rounded-lg text-center"
+            : "w-[350px]  h-[80vh] float-start m-10 bg-white bg-opacity-90 shadow-lg rounded-lg text-center"
+        }
+      >
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Doğanay To-Do</CardTitle>
+          <CardTitle
+            className={
+              theme == "dark"
+                ? "font-2xl font-bold text-white"
+                : "font-2xl font-bold"
+            }
+          >
+            Doğanay To-Do
+          </CardTitle>
         </CardHeader>
 
         {isAuthenticated ? (
           <>
             <CardContent>
-              <p className="text-sm text-gray-600 text-start">
+              <p
+                className={
+                  theme == "dark"
+                    ? "font-2xl font-bold text-white text-start"
+                    : "font-2xl font-bold text-start"
+                }
+              >
                 Kullanmaya başlayın.
               </p>
             </CardContent>

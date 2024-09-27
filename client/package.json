@@ -23,6 +23,7 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.7.0",
     "lucide-react": "^0.441.0",
     "primereact": "^10.8.3",
     "quill": "^2.0.2",

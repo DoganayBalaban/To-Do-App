@@ -15,10 +15,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useThemeStore from "@/store/Theme";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { updateProfile, loading, user, success } = useAuthStore();
+  const { theme } = useThemeStore();
   const { toast } = useToast();
   const [update, setUpdate] = useState(0);
   const [name, setName] = useState(user?.name || "");
@@ -67,7 +69,13 @@ const Profile = () => {
         {update === 0 ? (
           <>
             {" "}
-            <Card className="w-full max-w-md">
+            <Card
+              className={
+                theme === "dark"
+                  ? "bg-gray-800 w-full max-w-md"
+                  : " w-full max-w-md"
+              }
+            >
               <CardHeader className="flex flex-col items-center">
                 <Avatar className="w-32 h-32 mb-4">
                   <AvatarImage
@@ -75,7 +83,13 @@ const Profile = () => {
                     alt="Profil Resmi"
                   />
                 </Avatar>
-                <CardTitle className="text-2xl font-bold">
+                <CardTitle
+                  className={
+                    theme === "dark"
+                      ? "text-white text-2xl font-bold"
+                      : "text-2xl font-bold"
+                  }
+                >
                   {user.name}
                 </CardTitle>
                 <Badge>{user.role}</Badge>
@@ -89,7 +103,13 @@ const Profile = () => {
           </>
         ) : (
           <>
-            <Card>
+            <Card
+              className={
+                theme === "dark"
+                  ? "bg-gray-800 w-full max-w-md"
+                  : "bg-white w-full max-w-md"
+              }
+            >
               <CardHeader className="flex flex-col items-center">
                 <Avatar className="w-32 h-32 mb-4">
                   <AvatarImage
@@ -100,7 +120,13 @@ const Profile = () => {
               </CardHeader>
               <CardContent>
                 <div className="">
-                  <Label>Name</Label>
+                  <Label
+                    className={
+                      theme === "dark" ? "text-white text-xl" : "text-xl "
+                    }
+                  >
+                    Name
+                  </Label>
                   <Input
                     type="text"
                     value={name}

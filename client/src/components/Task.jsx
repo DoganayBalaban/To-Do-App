@@ -36,6 +36,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import useThemeStore from "@/store/Theme";
 
 const Task = ({ todo }) => {
   const [updatedTitle, setUpdatedTitle] = useState(todo.title);
@@ -46,6 +47,7 @@ const Task = ({ todo }) => {
   const [updatedPriority, setUpdatedPriority] = useState(todo.priority);
   const { toast } = useToast();
   const { deleteTodo, updateTodo } = useTodoStore();
+  const { theme } = useThemeStore();
 
   const handleDeleteTodo = async (id) => {
     const success = await deleteTodo(id);
@@ -164,7 +166,7 @@ const Task = ({ todo }) => {
                   <Label className="text-right">Completed</Label>
                   <Checkbox
                     checked={completed}
-                    onChange={(e) => setCompleted(e.target.checked)}
+                    onCheckedChange={(checked) => setCompleted(checked)}
                   />
                 </div>
               </div>
@@ -177,7 +179,8 @@ const Task = ({ todo }) => {
                         todo._id,
                         completed,
                         updatedTitle,
-                        updatedDescription
+                        updatedDescription,
+                        updatedPriority
                       );
                     }}
                     type="submit"

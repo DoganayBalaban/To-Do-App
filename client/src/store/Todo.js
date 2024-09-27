@@ -9,8 +9,7 @@ const useTodoStore = create(
     totalPages: 0,
     sortBy: "priority",
     order: "asc",
-    filterBy: "priority",
-    filterValue: "High",
+    checkedFilter: false,
     limit: 10,
     page: 1,
     error: null,
@@ -29,8 +28,6 @@ const useTodoStore = create(
           params: {
             sortBy,
             order,
-            filterBy,
-            filterValue,
             page,
             limit,
           },
@@ -56,7 +53,10 @@ const useTodoStore = create(
     },
 
     // Filtreleme alanını ve değerini güncelle
-    setFilter: (filterBy, filterValue) => set({ filterBy, filterValue }),
+    toggleCheckedFilter: () => {
+      set((state) => ({ checkedFilter: !state.checkedFilter }));
+      useTodoStore.getState().getTodos();
+    },
 
     // Sayfa numarasını güncelle
     setPage: (page) => set({ page }),

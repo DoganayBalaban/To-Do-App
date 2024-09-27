@@ -98,16 +98,14 @@ router.get("/", auth, async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Varsayılan olarak 1. sayfa
   const limit = parseInt(req.query.limit) || 10; // Varsayılan olarak 5 öğe
   const skipIndex = (page - 1) * limit;
-  const { sortBy, order, filterBy, filterValue } = req.query;
+  const { sortBy, order } = req.query;
 
-  // Sıralama kriteri ve yönü
   const sortQuery = {};
   if (sortBy) {
     sortQuery[sortBy] = order === "desc" ? -1 : 1;
   }
 
   try {
-    // Filtreleme ve sıralamayı birlikte kullanıyoruz
     const todos = await Todo.find({ user: req.user.id })
       .sort(sortQuery)
       .skip(skipIndex)

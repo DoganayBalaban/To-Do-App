@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const config = require("config");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,12 +29,13 @@ const connectDb = async () => {
     process.exit(1);
   }
 };
-connectDb();
 
+app.use(cookieParser());
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/todos", require("./routes/todos"));
 app.use("/api/notes", require("./routes/notes"));
 
 app.listen(3000, () => {
   console.log(`Listening on port ${PORT}`);
+  connectDb();
 });

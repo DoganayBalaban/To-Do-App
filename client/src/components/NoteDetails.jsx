@@ -41,6 +41,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import useThemeStore from "@/store/Theme";
 
 const NoteDetails = ({ note }) => {
   const { deleteNote, updateNote } = useNoteStore();
@@ -75,6 +76,7 @@ const NoteDetails = ({ note }) => {
   const handleRemoveTag = (tagToRemove) => {
     setUpdatedTags(updatedTags.filter((tag) => tag !== tagToRemove));
   };
+  const { theme } = useThemeStore();
   const handleUpdateNote = async (
     id,
 
@@ -111,23 +113,57 @@ const NoteDetails = ({ note }) => {
 
   return (
     <div>
-      <Card key={note._id} className="bg-white shadow-md m-8 p-2">
+      <Card
+        key={note._id}
+        className={
+          theme == "dark"
+            ? "bg-gray-900 shadow-md m-8 p-2"
+            : "bg-white shadow-md m-8 p-2"
+        }
+      >
         <CardHeader>
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold">{note.title}</h2>
+            <h2
+              className={
+                theme == "dark"
+                  ? "text-white text-lg font-semibold"
+                  : "text-lg font-semibold"
+              }
+            >
+              {note.title}
+            </h2>
           </div>
         </CardHeader>
         <CardContent>
           <div
             dangerouslySetInnerHTML={{ __html: note.body }} // HTML'yi render et
-            className="prose"
+            className={
+              theme == "dark"
+                ? "text-white text-lg font-semibold prose"
+                : "text-lg font-semibold prose"
+            }
           />
           <div className="flex flex-col gap-2 mt-3">
-            <span className="text-xl font-bold">Tags</span>{" "}
+            <span
+              className={
+                theme == "dark"
+                  ? "text-white text-lg font-semibold"
+                  : "text-lg font-semibold"
+              }
+            >
+              Tags
+            </span>{" "}
             <ul>
               {note.tags.map((tag, index) => (
                 <li key={index}>
-                  <Badge key={index} className="p-1">
+                  <Badge
+                    key={index}
+                    className={
+                      theme == "dark"
+                        ? "bg-white text-black p-1 me-1"
+                        : "p-1 me-1"
+                    }
+                  >
                     {tag}
                   </Badge>
                 </li>
