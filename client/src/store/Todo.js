@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import { devtools } from "zustand/middleware";
+import { axiosInstance } from "../lib/axios";
 
 const useTodoStore = create(
   devtools((set) => ({
@@ -21,7 +22,7 @@ const useTodoStore = create(
         useTodoStore.getState();
       try {
         set({ loading: true, error: null }); // Veriler alınırken loading true olmalı
-        const response = await axios.get("http://localhost:3000/api/todos", {
+        const response = await axiosInstance.get("/todos", {
           headers: {
             Authorization: token,
           },
@@ -64,8 +65,8 @@ const useTodoStore = create(
     addTodos: async (title, description, priority) => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/todos",
+        const response = await axiosInstance.post(
+          "/todos",
           {
             title: title,
             description: description,
@@ -91,14 +92,11 @@ const useTodoStore = create(
     deleteTodo: async (id) => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.delete(
-          `http://localhost:3000/api/todos/${id}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
+        const response = await axiosInstance.delete(`/todos/${id}`, {
+          headers: {
+            Authorization: token,
+          },
+        });
         if (!response.data.success) {
           return { success: false, message: response.data.message };
         }
@@ -117,8 +115,8 @@ const useTodoStore = create(
     updateTodo: async (id, completed, title, description, priority) => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.put(
-          `http://localhost:3000/api/todos/${id}`,
+        const response = await axiosInstance.put(
+          `/todos/${id}`,
           {
             completed: completed,
             title: title,

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-import { header } from "express-validator";
+import { axiosInstance } from "../lib/axios";
 
 const useAuthStore = create((set) => ({
   user: null,
@@ -11,10 +11,10 @@ const useAuthStore = create((set) => ({
   success: false,
   login: async (email, password) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        { email, password }
-      );
+      const response = await axiosInstance.post("/auth/login", {
+        email,
+        password,
+      });
       const { user, token } = response.data;
 
       set({
@@ -31,10 +31,11 @@ const useAuthStore = create((set) => ({
   },
   register: async (name, email, password) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
-        { name, email, password }
-      );
+      const response = await axiosInstance.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
       const { user, token } = response.data;
       set({
         success: true,
@@ -55,7 +56,7 @@ const useAuthStore = create((set) => ({
   getUser: async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3000/api/auth", {
+      const response = await axiosInstance.get("/auth", {
         headers: {
           Authorization: token,
         },
@@ -69,8 +70,8 @@ const useAuthStore = create((set) => ({
     try {
       set({ loading: true, error: false });
       const token = localStorage.getItem("token");
-      const response = await axios.put(
-        "http://localhost:3000/api/auth/me",
+      const response = await axiosInstance.put(
+        "/auth/me",
         {
           name: name,
         },

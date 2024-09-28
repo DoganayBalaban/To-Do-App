@@ -109,7 +109,7 @@ const home = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {todos.map((todo) => (
+          {todos?.map((todo) => (
             <Task key={todo._id} todo={todo} />
           ))}
         </TableBody>

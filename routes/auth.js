@@ -3,7 +3,8 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const config = require("config");
+const dotenv = require("dotenv");
+dotenv.config();
 const User = require("../models/User");
 const auth = require("../middleware/auth");
 // @route  GET api/auth
@@ -57,7 +58,7 @@ router.post(
           id: newUser.id,
         },
       };
-      const token = jwt.sign(payload, config.get("jwtSecret"), {
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: 360000,
       });
       res.json({ token });
@@ -97,7 +98,7 @@ router.post(
           id: user.id,
         },
       };
-      const token = jwt.sign(payload, config.get("jwtSecret"), {
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: 360000,
       });
       res.json({ token });

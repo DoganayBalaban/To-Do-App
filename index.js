@@ -1,9 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const config = require("config");
+
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
+const path = require("path");
 const PORT = process.env.PORT || 3000;
 
 app.use(
@@ -14,6 +17,13 @@ app.use(
   })
 );
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/client/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+  });
+}
+
 app.use(
   express.json({
     extended: false,
@@ -22,7 +32,7 @@ app.use(
 
 const connectDb = async () => {
   try {
-    await mongoose.connect(config.get("mongoURI"));
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Connected");
   } catch (error) {
     console.error(error.message);
@@ -35,7 +45,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/todos", require("./routes/todos"));
 app.use("/api/notes", require("./routes/notes"));
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
   connectDb();
 });

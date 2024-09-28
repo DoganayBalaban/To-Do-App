@@ -47,6 +47,7 @@ const AddTask = () => {
       }
     } catch (error) {
       // Handle errors if needed
+      console.log(error);
       toast({
         title: "Error",
         description: "An error occurred while adding the task.",

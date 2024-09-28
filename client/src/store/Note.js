@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-
+import { axiosInstance } from "../lib/axios";
 const useNoteStore = create((set) => ({
   notes: [],
   loading: true,
@@ -10,7 +10,7 @@ const useNoteStore = create((set) => ({
   getNotes: async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get("http://localhost:3000/api/notes", {
+      const response = await axiosInstance.get("/notes", {
         headers: {
           Authorization: token,
         },
@@ -23,8 +23,8 @@ const useNoteStore = create((set) => ({
   addNotes: async (title, body, tags) => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/notes",
+      const response = await axiosInstance.post(
+        "/notes",
         {
           title: title,
           body: body,
@@ -47,14 +47,11 @@ const useNoteStore = create((set) => ({
   deleteNote: async (id) => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/notes/${id}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const response = await axiosInstance.delete(`/notes/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
 
       set((state) => ({
         notes: state.notes.filter((note) => note._id !== id),
@@ -67,8 +64,8 @@ const useNoteStore = create((set) => ({
   updateNote: async (id, title, body, tags) => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.put(
-        `http://localhost:3000/api/notes/${id}`,
+      const response = await axiosInstance.put(
+        `/notes/${id}`,
         {
           title: title,
           body: body,

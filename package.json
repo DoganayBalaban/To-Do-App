@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "start": "NODE_ENV=production node index.js",
     "index": "nodemon index",
     "client": "npm run dev --prefix client",
-    "dev": "concurrently \"npm run index\" \"npm run client\""
+    "dev": "NODE_ENV=development concurrently \"npm run index\" \"npm run client\"",
+    "build": "npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +16,9 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "concurrently": "^9.0.1",
-    "config": "^3.3.12",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
